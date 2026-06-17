@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { gallery } from "../data/restaurant";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
@@ -85,61 +86,63 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {activeImage && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 sm:p-4 safe-x safe-top safe-bottom animate-fade-in"
-          onClick={close}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${activeImage.title} preview`}
-        >
-          <button
-            type="button"
-            onClick={close}
-            className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10 touch-target rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
-            aria-label="Close lightbox"
-          >
-            <X size={24} />
-          </button>
-
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              showPrev();
-            }}
-            className="absolute left-2 sm:left-4 top-1/2 z-10 touch-target -translate-y-1/2 rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
-            aria-label="Previous image"
-          >
-            <ChevronLeft size={26} />
-          </button>
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              showNext();
-            }}
-            className="absolute right-2 sm:right-4 top-1/2 z-10 touch-target -translate-y-1/2 rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
-            aria-label="Next image"
-          >
-            <ChevronRight size={26} />
-          </button>
-
+      {activeImage &&
+        createPortal(
           <div
-            className="relative max-w-4xl w-full animate-zoom-in px-2"
-            onClick={(event) => event.stopPropagation()}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-3 sm:p-4 safe-x safe-bottom animate-fade-in"
+            onClick={close}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${activeImage.title} preview`}
           >
-            <img
-              src={activeImage.image}
-              alt={activeImage.title}
-              className="w-full h-auto max-h-[75dvh] sm:max-h-[80vh] object-contain rounded-2xl shadow-2xl"
-            />
-            <p className="mt-3 sm:mt-4 text-center text-white text-base sm:text-lg font-semibold px-2">
-              {activeImage.title}
-            </p>
-          </div>
-        </div>
-      )}
+            <button
+              type="button"
+              onClick={close}
+              className="absolute top-[calc(env(safe-area-inset-top,0px)+5.25rem)] lg:top-[calc(env(safe-area-inset-top,0px)+7.25rem)] right-3 sm:right-4 z-10 touch-target rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+              aria-label="Close lightbox"
+            >
+              <X size={24} />
+            </button>
+
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                showPrev();
+              }}
+              className="absolute left-2 sm:left-4 top-1/2 z-10 touch-target -translate-y-1/2 rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+              aria-label="Previous image"
+            >
+              <ChevronLeft size={26} />
+            </button>
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                showNext();
+              }}
+              className="absolute right-2 sm:right-4 top-1/2 z-10 touch-target -translate-y-1/2 rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+              aria-label="Next image"
+            >
+              <ChevronRight size={26} />
+            </button>
+
+            <div
+              className="relative max-w-4xl w-full animate-zoom-in px-2"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <img
+                src={activeImage.image}
+                alt={activeImage.title}
+                className="w-full h-auto max-h-[75dvh] sm:max-h-[80vh] object-contain rounded-2xl shadow-2xl"
+              />
+              <p className="mt-3 sm:mt-4 text-center text-white text-base sm:text-lg font-semibold px-2">
+                {activeImage.title}
+              </p>
+            </div>
+          </div>,
+          document.body,
+        )}
     </main>
   );
 }
