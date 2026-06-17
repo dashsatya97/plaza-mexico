@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Firefox — thin red thumb on white track */
+    scrollbar-width: thin;
+    scrollbar-color: #c62828 #ffffff;
+  }
+
+  body {
+    @apply font-sans text-gray-900 antialiased overflow-x-hidden;
+  }
+
+  /* WebKit — thin brand scrollbar (Chrome, Safari, Edge) */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #c62828 #ffffff;
+  }
+
+  *::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #c62828;
+    border-radius: 9999px;
+    border: 1px solid #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #a11c1c;
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: #ffffff;
+  }
+}
+
+@layer utilities {
+  /* Offset for fixed header: h-20 mobile/tablet, h-28 desktop */
+  .page-offset {
+    @apply pt-20 lg:pt-28;
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .safe-x {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  /* Minimum 44×44px touch target (WCAG / mobile HIG) */
+  .touch-target {
+    @apply min-h-11 min-w-11 inline-flex items-center justify-center;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold
+           hover:bg-primary-600 transition-all duration-300
+           hover:shadow-lg hover:shadow-primary-500/25 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg font-semibold
+           hover:bg-white hover:text-primary-500 transition-all duration-300 active:scale-95;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary-500 text-primary-500 px-6 sm:px-8 py-3 rounded-lg font-semibold
+           hover:bg-primary-500 hover:text-white transition-all duration-300 active:scale-95;
+  }
+
+  .section-title {
+    @apply text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4;
+  }
+
+  .section-subtitle {
+    @apply text-base sm:text-lg text-gray-600 text-center max-w-2xl mx-auto mb-8 sm:mb-12 px-2;
+  }
+
+  /* Image hover zoom — used on cards site-wide */
+  .img-hover-zoom {
+    @apply transition-transform duration-500 ease-out group-hover:scale-110;
+  }
+}
+
+@keyframes testimonial-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.testimonial-track {
+  display: flex;
+  width: max-content;
+  animation: testimonial-scroll 60s linear infinite;
+}
+
+.testimonial-track:hover {
+  animation-play-state: paused;
+}
+
+/* Respect users who prefer reduced motion: stop the marquee and neutralize
+   long transitions/animations across the app. */
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
