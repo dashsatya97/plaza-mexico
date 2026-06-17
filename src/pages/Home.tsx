@@ -18,12 +18,15 @@ import {
 } from "../data/restaurant";
 import { formatPrice } from "../utils/format";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { useOrder } from "../context/OrderContext";
 import LocationMap from "../components/LocationMap";
 import AnimateIn from "../components/AnimateIn";
 
 const iconMap = { Leaf, Flame, Users };
 
 function Hero() {
+  const { openOrder } = useOrder();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
@@ -62,9 +65,13 @@ function Hero() {
 
         <AnimateIn immediate variant="fade-up" delay={340}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href={`tel:${business.phoneHref}`} className="btn-primary text-base">
+            <button
+              type="button"
+              onClick={openOrder}
+              className="btn-primary text-base"
+            >
               {hero.primaryCTA}
-            </a>
+            </button>
             <Link to="/menu" className="btn-secondary text-base">
               {hero.secondaryCTA}
             </Link>

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { business } from "../data/restaurant";
 import { createMailtoLink, saveSubmission } from "../utils/submissions";
+import { sanitizeFormField } from "../utils/inputFilters";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import PageHero from "../components/PageHero";
 import AnimateIn from "../components/AnimateIn";
@@ -124,7 +125,7 @@ export default function CateringPage() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: sanitizeFormField(name, value),
     }));
   };
 
@@ -180,30 +181,28 @@ export default function CateringPage() {
               const Icon = event.icon;
               return (
                 <AnimateIn key={idx} variant="fade-up" delay={(idx % 6) * 80}>
-                <div
-                  className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-primary-500 h-full"
-                >
-                  <div className="bg-gradient-to-br from-primary-50 to-secondary-50 p-8">
-                    <Icon className="w-16 h-16 text-primary-500 group-hover:scale-110 transition-transform duration-300" />
+                  <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-primary-500 h-full">
+                    <div className="bg-gradient-to-br from-primary-50 to-secondary-50 p-8">
+                      <Icon className="w-16 h-16 text-primary-500 group-hover:scale-110 transition-transform duration-300" />
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        {event.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4">{event.description}</p>
+                      <ul className="space-y-2">
+                        {event.features.map((feature, i) => (
+                          <li
+                            key={i}
+                            className="flex items-center text-sm text-gray-700"
+                          >
+                            <span className="w-2 h-2 bg-secondary-500 rounded-full mr-3" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
-                      {event.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4">{event.description}</p>
-                    <ul className="space-y-2">
-                      {event.features.map((feature, i) => (
-                        <li
-                          key={i}
-                          className="flex items-center text-sm text-gray-700"
-                        >
-                          <span className="w-2 h-2 bg-secondary-500 rounded-full mr-3" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
                 </AnimateIn>
               );
             })}
@@ -316,11 +315,12 @@ export default function CateringPage() {
                   type="tel"
                   id="phone"
                   name="phone"
+                  inputMode="tel"
+                  autoComplete="tel"
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  minLength={7}
-                  maxLength={20}
+                  maxLength={10}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
                   placeholder="(123) 456-7890"
                 />
@@ -380,14 +380,16 @@ export default function CateringPage() {
                   Number of Guests <span className="text-red-500">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   id="guestCount"
                   name="guestCount"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={formData.guestCount}
                   onChange={handleChange}
                   required
-                  min="1"
-                  max="500"
+                  minLength={1}
+                  maxLength={3}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
                   placeholder="50"
                 />

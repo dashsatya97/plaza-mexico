@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from "lucide-react";
 import { business, hours } from "../data/restaurant";
 import { createMailtoLink, saveSubmission } from "../utils/submissions";
+import { sanitizeFormField } from "../utils/inputFilters";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import PageHero from "../components/PageHero";
 import LocationMap from "../components/LocationMap";
@@ -32,7 +33,10 @@ export default function ContactPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: sanitizeFormField(name, value),
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -217,6 +221,8 @@ export default function ContactPage() {
                           id="contact-email"
                           name="email"
                           type="email"
+                          inputMode="email"
+                          autoComplete="email"
                           value={formData.email}
                           onChange={handleChange}
                           required

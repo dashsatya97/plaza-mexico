@@ -11,6 +11,18 @@ import {
   validateDetails,
 } from "./orderUtils";
 import type { DetailsForm, Fulfillment, Step } from "./types";
+import { sanitizeInput, type InputKind } from "../../utils/inputFilters";
+
+const FIELD_KINDS: Partial<Record<keyof DetailsForm, InputKind>> = {
+  name: "name",
+  phone: "phone",
+  email: "email",
+  street: "address",
+  apt: "unit",
+  city: "city",
+  zip: "zip",
+  instructions: "multiline",
+};
 
 export function useOrderCheckout() {
   const {
@@ -63,7 +75,10 @@ export function useOrderCheckout() {
   const minScheduleTime = useMemo(() => earliestScheduleTime(), [step]);
 
   const updateField = (field: keyof DetailsForm, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    const kind = FIELD_KINDS[field];
+    const nextValue = kind ? sanitizeInput(kind, value) : value;
+
+    setForm((prev) => ({ ...prev, [field]: nextValue }));
     setErrors((prev) => {
       if (!prev[field]) return prev;
       const next = { ...prev };

@@ -177,7 +177,8 @@ export const menuItems: MenuItem[] = [
   {
     id: 9,
     name: "Tamales de Puerco",
-    description: "Steamed corn masa filled with slow-cooked pork in red salsa.",
+    description:
+      "Steamed corn masa filled with slow-cooked pork with tangy red salsa on the side.",
     price: 4.99,
     category: "Tamales",
     image:

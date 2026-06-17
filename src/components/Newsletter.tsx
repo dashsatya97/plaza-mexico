@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Mail, CheckCircle2, Send } from "lucide-react";
 import { saveSubmission } from "../utils/submissions";
+import { sanitizeInput } from "../utils/inputFilters";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -62,7 +63,7 @@ export default function Newsletter() {
                 type="email"
                 value={email}
                 onChange={(e) => {
-                  setEmail(e.target.value);
+                  setEmail(sanitizeInput("email", e.target.value));
                   if (error) setError("");
                 }}
                 placeholder="you@email.com"

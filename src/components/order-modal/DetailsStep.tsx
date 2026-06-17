@@ -40,6 +40,7 @@ export default function DetailsStep({
               value={form.name}
               onChange={(e) => updateField("name", e.target.value)}
               maxLength={80}
+              autoComplete="name"
               className={inputClass("name")}
               placeholder="Your name"
             />
@@ -47,9 +48,11 @@ export default function DetailsStep({
           <Field label="Phone" required error={errors.phone}>
             <input
               type="tel"
+              inputMode="tel"
+              autoComplete="tel"
               value={form.phone}
               onChange={(e) => updateField("phone", e.target.value)}
-              maxLength={20}
+              maxLength={10}
               className={inputClass("phone")}
               placeholder="(203) 555-0100"
             />
@@ -58,6 +61,8 @@ export default function DetailsStep({
             <Field label="Email (optional)" error={errors.email}>
               <input
                 type="email"
+                inputMode="email"
+                autoComplete="email"
                 value={form.email}
                 onChange={(e) => updateField("email", e.target.value)}
                 maxLength={120}
@@ -114,9 +119,11 @@ export default function DetailsStep({
               <input
                 type="text"
                 inputMode="numeric"
+                pattern="[0-9-]*"
                 value={form.zip}
                 onChange={(e) => updateField("zip", e.target.value)}
                 maxLength={10}
+                autoComplete="postal-code"
                 className={inputClass("zip")}
                 placeholder="06513"
               />
